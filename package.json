@@ -1,0 +1,16 @@
+{
+  "name": "playlistcast",
+  "version": "0.0.1",
+  "description": "Social playlist app for Chromecast using Rdio API",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha text/* -R spec"
+  },
+  "keywords": [
+    "chromecast",
+    "rdio",
+    "playlist"
+  ],
+  "author": "Luis Eduardo Brito <luiseduardobrito.github.io>",
+  "license": "MIT"
+}
