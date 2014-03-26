@@ -12,5 +12,10 @@
     "playlist"
   ],
   "author": "Luis Eduardo Brito <luiseduardobrito.github.io>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mongoose-validator": "~0.2.2",
+    "express": "~3.5.1",
+    "mongoose": "~3.8.8"
+  }
 }
