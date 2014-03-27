@@ -16,6 +16,10 @@
   "dependencies": {
     "mongoose-validator": "~0.2.2",
     "express": "~3.5.1",
-    "mongoose": "~3.8.8"
+    "mongoose": "~3.8.8",
+    "querystring": "~0.2.0",
+    "node-rdio": "~0.1.1",
+    "rdio": "~1.0.1",
+    "async": "~0.2.10"
   }
 }
