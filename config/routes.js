@@ -18,6 +18,14 @@ module.exports = {
 			method: "callback",
 
 			filter: []
+		},
+
+		"/user/me": {
+
+			controller: "user",
+			method: "me",
+
+			filter: []
 		}
 	},
 

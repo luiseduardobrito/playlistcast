@@ -8,7 +8,7 @@ var settings = {
 
 		db: {
 
-			protocol: "mongo://"
+			protocol: "mongodb://",
 
 			host: "localhost",
 			db: "playlistcast",
