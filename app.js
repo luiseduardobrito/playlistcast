@@ -9,6 +9,8 @@ var api = require("./api");
 var app = express();
 
 // New call to compress content
+app.use(express.cookieParser());
+app.use(express.session({secret: '1234567890QWERTY'}));
 app.use(express.compress());
 app.use(express.static(__dirname + '/public'));
 
