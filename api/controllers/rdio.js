@@ -1,7 +1,7 @@
 var querystring = require("querystring");
 var Rdio = require("../adapters/rdio");
 
-var APP_KEYS = ["xr4ee4jdsj3dnjhcdmauekht", "wqeGbj3tMT"];
+var APP_KEYS = ["q4svkj3f5peqckec29sxexmg", "d8TfYRczkB"];
 
 module.exports = {
 	
@@ -19,8 +19,8 @@ module.exports = {
 
 			else {
 
-				res.session.token = rdio.token[0];
-				res.session.secret = rdio.token[1];
+				req.session.token = rdio.token[0];
+				req.session.secret = rdio.token[1];
 
 				res.redirect(url);
 			}
@@ -34,7 +34,7 @@ module.exports = {
 			req.session.secret
 		];
 
-		var rdio = new Rdio(APP_KEYS. credentials);
+		var rdio = new Rdio(APP_KEYS, credentials);
 
 		rdio.completeAuthentication(req.param("oauth_verifier"), function(err) {
 
@@ -47,41 +47,29 @@ module.exports = {
 
 			else {
 
-				res.cookie("rdio_token", rdio.token[0]);
-				res.cookie("rdio_secret", rdio.token[1]);
+				req.session.rdio = {
+					token: rdio.token[0],
+					secret: rdio.token[1]
+				}
 
-				res.json({
-					result: "success"
-				});
+				rdio.call("currentUser", function(err, data) {
+
+					if(err) {
+						res.json({
+							result: "error",
+							exception: err
+						});
+					}
+
+					else {
+
+						res.json({
+							result: "success",
+							user: data
+						});
+					}
+				})
 			}
 		})		
-	},
-
-	current: function(req, res) {
-
-		var credentials = [
-			req.session.token,
-			req.session.secret
-		];	
-
-		var rdio = new Rdio(APP_KEYS. credentials);
-
-		rdio.call("currentUser", function(err, data) {
-
-			if(err) {
-				res.json({
-					result: "error",
-					exception: err
-				});
-			}
-
-			else {
-
-				res.json({
-					result: "success",
-					user: data
-				});
-			}
-		})
 	}
 }
