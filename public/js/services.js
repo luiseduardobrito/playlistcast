@@ -14,12 +14,10 @@ playlistServices.factory("$cast", [
     _this.observers = {};
 
     _this.init = function(){
-      jQuery(window).ready(function(){
-        _this.registerReceiver()
-      });
+      return _public;
     };
 
-    _this.registerReceiver = function(){
+    _public.registerReceiver = function(elem){
 
       console.log("cast> registering receiver...");
 
@@ -28,7 +26,7 @@ playlistServices.factory("$cast", [
        **/
       var appConfig = new cast.receiver.CastReceiverManager.Config();
 
-      _this.mediaElement = document.getElementById('media');
+      _this.mediaElement = document.getElementById(elem);
       _this.mediaManager = new cast.receiver.MediaManager(_this.mediaElement);
       _this.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 
@@ -54,8 +52,11 @@ playlistServices.factory("$cast", [
       /**
       * Custom Message Bus for message handling
       */
-      var customMessageBus = _this.castReceiverManager.getCastMessageBus('urn:x-cast:super.awesome.example');
-      customMessageBus.onMessage = _this.notifyMessageReceiver;
+      _this.customMessageBus = _this.castReceiverManager.getCastMessageBus('urn:x-cast:com.luiseduardobrito.playlistcast');
+
+      _this.customMessageBus.onMessage = function(data) {
+        _this.notify("message", data);
+      }
 
       /**
        * Initializes the system manager. The application should call this method when
@@ -64,20 +65,24 @@ playlistServices.factory("$cast", [
        */
       _this.castReceiverManager.start(appConfig);
       console.log("cast> media receiver registered!");
+
+      _this.notify("ready");
     };
 
-    _this.notifyMessageReceiver = function(event) {
+    _this.notify = function(event, data) {
 
-      var observers = _this.observers["message"] || [];
+      data = data || {};
+
+      var observers = _this.observers[event] || [];
 
       for(var i = 0; i < observers.length; i++) {
-        observers(event);
+        observers[i](data);
       }
     }
 
-    _public.onMessageReceived = function(fn) {
-      _this.observers["message"] = _this.observers["message"] || [];
-      _this.observers["message"].push(fn);
+    _public.on = function(event, fn) {
+      _this.observers[event] = _this.observers[event] || [];
+      _this.observers[event].push(fn || function(){});
     }
 
     return _this.init();
